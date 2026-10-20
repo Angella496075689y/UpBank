@@ -1,0 +1,1284 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>UpBank</title>
+
+  <style>
+
+    * {
+
+      box-sizing: border-box;
+
+    }
+
+    body {
+
+      font-family: Arial, sans-serif;
+
+      background: white(255, 255, 255)
+      text-align: center;
+
+      padding: 35px 15px;
+
+      margin: 0;
+
+    }
+
+    .card {
+
+      background: white;
+
+      max-width: 360px;
+
+      margin: 35px auto;
+
+      padding: 28px;
+
+      border-radius: 16px;
+
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
+
+    }
+
+    h1 {
+
+      color: #174b79;
+
+      font-size: 30px;
+
+    }
+
+    button {
+
+      background: #174b7d;
+
+      color: white;
+
+      padding: 13px 22px;
+
+      border: none;
+
+      border-radius: 8px;
+
+      cursor: pointer;
+
+      font-size: 15px;
+
+      font-weight: bold;
+
+    }
+
+    button:disabled {
+
+      opacity: 0.65;
+
+      cursor: not-allowed;
+
+    }
+
+    label,
+
+    input {
+
+      display: block;
+
+      text-align: left;
+
+      margin: 0 auto 12px;
+
+    }
+
+    label {
+
+      max-width: 280px;
+
+      width: 100%;
+
+      color: #243b53;
+
+      font-size: 14px;
+
+    }
+
+    input {
+
+      width: 100%;
+
+      max-width: 280px;
+
+      padding: 12px;
+
+      border: 1px solid #cbd5e1;
+
+      border-radius: 7px;
+
+      font-size: 16px;
+
+    }
+
+    #loginMessage {
+
+      overflow-wrap: anywhere;
+
+    }
+
+    #Dashboard {
+
+      max-width: 760px;
+
+      margin: 0 auto;
+
+      text-align: left;
+
+      color: #172b4d;
+
+    }
+
+    .dashboard-header {
+
+      display: flex;
+
+      justify-content: space-between;
+
+      align-items: center;
+
+      gap: 12px;
+
+      margin: 10px auto 25px;
+
+    }
+
+    .dashboard-header h1 {
+
+      color: white;
+
+      font-size: 27px;
+
+      margin: 0;
+
+    }
+
+    .dashboard-header p {
+
+      color: #e1edfa;
+
+      margin: 6px 0 0;
+
+    }
+
+    #logoutBtn {
+
+      padding: 11px 15px;
+
+      font-size: 12px;
+
+      background: white;
+
+      color: #174b79 !important;
+
+      border: 1px solid #d7e3f0;
+
+      flex-shrink: 0;
+
+    }
+
+
+      background: #fff4d6;
+
+      color: #76540a;
+
+      padding: 13px;
+
+      border-radius: 10px;
+
+      font-size: 12px;
+
+      line-height: 1.5;
+
+      margin-bottom: 20px;
+
+    }
+
+    .balance-card,
+
+    .transaction-card {
+
+      background: white;
+
+      border-radius: 16px;
+
+      padding: 23px;
+
+      margin: 0 0 22px;
+
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+
+    }
+
+    .balance-label {
+
+      color: #60738b;
+
+      font-size: 14px;
+
+      margin: 0 0 10px;
+
+    }
+
+    .balance-amount {
+
+      color: #173f6b;
+
+      font-size: 32px;
+
+      margin: 0 0 18px;
+
+      overflow-wrap: anywhere;
+
+    }
+
+    .account-label {
+
+      color: #60738b;
+
+      font-size: 13px;
+
+      margin-top: 14px;
+
+    }
+
+    .transaction-card h2 {
+
+      color: #173f6b;
+
+      margin-top: 0;
+
+    }
+
+    .transaction-row {
+
+      display: flex;
+
+      justify-content: space-between;
+
+      align-items: center;
+
+      gap: 15px;
+
+      padding: 17px 12px;
+
+      margin: 0-12px;
+
+      border-bottom: 1px solid #e5ebf2;
+
+      border-radius: 8px;
+
+      font-size: 14px;
+
+      transition: background 0.2s ease;
+    }
+    .transaction-row:hover {
+      background: #f3f7fc;
+
+    }
+
+    .transaction-name {
+
+      font-weight: bold;
+
+      color: #243b53;
+
+    }
+
+    .transaction-date {
+
+      display: block;
+
+      color: #73849a;
+
+      font-size: 12px;
+
+      margin-top: 5px;
+
+    }
+
+    .transaction-amount {
+
+      font-weight: bold;
+
+      white-space: nowrap;
+
+    }
+
+    .credit {
+
+      color: #16804a;
+
+    }
+
+    .debit {
+
+      color: #34465a;
+
+    }
+
+    @media (max-width: 480px) {
+
+      body {
+
+        padding: 22px 12px;
+
+      }
+
+      .dashboard-header h1 {
+
+        font-size: 23px;
+
+      }
+
+      .balance-card,
+
+      .transaction-card {
+
+        padding: 17px;
+
+      }
+
+      .balance-amount {
+
+        font-size: 27px;
+
+      }
+
+      .transaction-row {
+
+        font-size: 13px;
+
+      }
+
+    }
+
+    /* Action form styling */
+#actionScreen {
+  background: #ffffff;
+  padding: 22px;
+  border-radius: 16px;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.08);
+  margin-top: 20px;
+}
+
+#actionScreen h2 {
+  color: #173b75;
+  margin-bottom: 10px;
+}
+
+#actionFormArea form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+#actionFormArea label {
+  display: block;
+  color: #24344d;
+  font-weight: 600;
+  margin-top: 8px;
+}
+
+#actionFormArea input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 13px;
+  border: 1px solid #cbd5e1;
+  border-radius: 9px;
+  font-size: 16px;
+  background: #ffffff;
+  color: #172033;
+}
+
+#actionFormArea input:focus {
+  outline: 2px solid #3978e8;
+  border-color: #3978e8;
+}
+
+#actionFormArea button {
+  width: 100%;
+  padding: 14px;
+  margin-top: 14px;
+  background: #1769e0;
+  color: #ffffff;
+  border: none;
+  border-radius: 9px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+#actionScreen > button {
+  padding: 10px 14px;
+  background: #edf3ff;
+  color: #174b91;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+  </style>
+
+</head>
+
+<body>
+
+  <!-- Sign-in page -->
+
+
+
+  <div class="card" id="signInCard">
+
+    <h1>Welcome To UpBank</h1>
+
+    <p>Welcome to a Simpler Banking Experience.</p>
+
+
+    <h2>Sign in to UpBank</h2>
+
+    <label for="email">Email address</label>
+
+    <input
+
+      type="email"
+
+      id="email"
+
+      autocomplete="username"
+
+      required
+
+    >
+
+    <label for="password">Password</label>
+
+    <input
+
+      type="password"
+
+      id="password"
+
+      autocomplete="current-password"
+
+      required
+
+    >
+
+    <button type="button" id="signInBtn">SIGN IN</button>
+
+    <p id="loginMessage" role="status" aria-live="polite"></p>
+
+  </div>
+
+  <!-- DASHBOARD -->
+
+  <section id="Dashboard" style="display:none;">
+
+    <div class="dashboard-header">
+
+      <div>
+
+        <h1>UpBank</h1>
+
+        <p>account overview</p>
+
+      </div>
+
+      <button type="button" id="logoutBtn">LOG OUT</button>
+
+    </div>
+
+
+    <div class="balance-card">
+
+      <p class="balance-label">
+
+        Available balance ·
+
+      </p>
+
+      <h2 class="balance-amount" id="balanceAmount">
+
+        $826,450.13
+
+      </h2>
+
+      <button type="button" id="toggleBalanceBtn">
+
+        HIDE BALANCE
+
+      </button>
+
+      <p class="account-label">account · USD</p>
+
+      <!-- Quick Actions -->
+
+<div class="quick-actions-card">
+
+  <h2>Quick Actions</h2>
+
+  <div class="quick-actions-grid">
+
+    <button type="button" class="action-btn"
+
+      onclick="showAction('Transfer')">
+
+      <span class="action-icon">↗</span>
+
+      <span>Transfer</span>
+
+    </button>
+
+    <button type="button" class="action-btn"
+
+      onclick="showAction('Withdraw')">
+
+      <span class="action-icon">↓</span>
+
+      <span>Withdraw</span>
+
+    </button>
+
+    <button type="button" class="action-btn"
+
+      onclick="showAction('Savings')">
+
+      <span class="action-icon">▣</span>
+
+      <span>Savings</span>
+
+    </button>
+
+    <button type="button" class="action-btn"
+
+      onclick="showAction('Investment')">
+
+      <span class="action-icon">↗</span>
+
+      <span>Investment</span>
+
+    </button>
+
+    <button type="button" class="action-btn"
+
+      onclick="showAction('Betting')">
+
+      <span class="action-icon">◎</span>
+
+      <span>Betting</span>
+
+    </button>
+
+    <button type="button" class="action-btn"
+
+      onclick="showAction('Statement')">
+
+      <span class="action-icon">▤</span>
+
+      <span>Statement</span>
+
+    </button>
+
+    
+    </button>
+
+    <button type="button" class="action-btn"
+
+      onclick="showAction('Pay Bills')">
+
+      <span class="action-icon">▤</span>
+
+      <span>Pay Bills</span>
+
+    </button>
+
+  </div>
+
+  <p id="actionMessage" role="status" aria-live="polite">
+
+
+  </p>
+
+</div>
+
+    </div>
+
+    <div class="transaction-card">
+
+      <h2>Recent transactions</h2>
+
+      <h3>October 2026</h3>
+
+      <div class="transaction-row">
+
+        <div>
+
+          <span class="transaction-name">Grocery Store</span>
+
+          <span class="transaction-date">Oct 19, 2026</span>
+
+        </div>
+
+        <span class="transaction-amount debit">−$65.40</span>
+
+      </div>
+
+      <div class="transaction-row">
+
+        <div>
+
+          <span class="transaction-name">Bonus Payment Deposit</span>
+
+          <span class="transaction-date">Oct 14, 2026</span>
+
+        </div>
+
+        <span class="transaction-amount credit">+$17,320.05</span>
+
+      </div>
+
+      <div class="transaction-row">
+
+        <div>
+
+          <span class="transaction-name">Electricity Bill</span>
+
+          <span class="transaction-date">Oct 12, 2026</span>
+
+        </div>
+
+        <span class="transaction-amount debit">−$105.00</span>
+
+      </div>
+
+      <div class="transaction-row">
+
+        <div>
+
+          <span class="transaction-name">Coffee Shop</span>
+
+          <span class="transaction-date">Oct 10, 2026</span>
+
+        </div>
+
+        <span class="transaction-amount debit">−$23.50</span>
+
+      </div>
+
+      <div class="transaction-row">
+
+        <div>
+
+          <span class="transaction-name">ATS Deposit</span>
+
+          <span class="transaction-date">Oct 2, 2026</span>
+
+        </div>
+
+        <span class="transaction-amount credit">+$190,200.06</span>
+
+      </div>
+
+      <h3>September 2026</h3>
+
+      <div class="transaction-row">
+
+        <div>
+
+          <span class="transaction-name">Bonus Payment Deposit</span>
+
+          <span class="transaction-date">Sep 18, 2026</span>
+
+        </div>
+
+        <span class="transaction-amount credit">+$57,320.05</span>
+
+      </div>
+
+      <div class="transaction-row">
+
+        <div>
+
+          <span class="transaction-name">Kellon’s Shop Deposit</span>
+
+          <span class="transaction-date">Sep 13, 2026</span>
+
+        </div>
+
+        <span class="transaction-amount credit">+$12,200.00</span>
+
+      </div>
+
+      <div class="transaction-row">
+
+        <div>
+
+          <span class="transaction-name">Doctor’s Appointment</span>
+
+          <span class="transaction-date">Sep 12, 2026</span>
+
+        </div>
+
+        <span class="transaction-amount debit">−$53.26</span>
+
+      </div>
+
+      <div class="transaction-row">
+
+        <div>
+
+          <span class="transaction-name">Bonus Payment Deposit</span>
+
+          <span class="transaction-date">Sep 10, 2026</span>
+
+        </div>
+
+        <span class="transaction-amount credit">+$107,820.05</span>
+
+      </div>
+
+      <div class="transaction-row">
+
+        <div>
+
+          <span class="transaction-name">ATS Deposit</span>
+
+          <span class="transaction-date">Sep 10, 2026</span>
+
+        </div>
+
+        <span class="transaction-amount credit">+$126,020.05</span>
+
+      </div>
+
+      <div class="transaction-row">
+
+        <div>
+
+          <span class="transaction-name">ATM Withdrawal</span>
+
+          <span class="transaction-date">Sep 7, 2026</span>
+
+        </div>
+
+        <span class="transaction-amount debit">−$3,054.06</span>
+
+      </div>
+
+      <h3>August 2026</h3>
+
+      <div class="transaction-row">
+
+        <div>
+
+          <span class="transaction-name">ATM Withdrawal</span>
+
+          <span class="transaction-date">Aug 26, 2026</span>
+
+        </div>
+
+        <span class="transaction-amount debit">−$9,003.00</span>
+
+      </div>
+
+      <div class="transaction-row">
+
+        <div>
+
+          <span class="transaction-name">ATS Deposit</span>
+
+          <span class="transaction-date">Aug 24, 2026</span>
+
+        </div>
+
+        <span class="transaction-amount credit">+$305,320.05</span>
+
+      </div>
+
+      <h3>July 2026</h3>
+
+      <div class="transaction-row">
+
+        <div>
+
+          <span class="transaction-name">ATM Withdrawal</span>
+
+          <span class="transaction-date">Jul 27, 2026</span>
+
+        </div>
+
+        <span class="transaction-amount debit">−$12,035.50</span>
+
+      </div>
+
+      <div class="transaction-row">
+
+        <div>
+
+          <span class="transaction-name">Kellon’s Shop Deposit</span>
+
+          <span class="transaction-date">Jul 14, 2026</span>
+
+        </div>
+
+        <span class="transaction-amount credit">+$720.09</span>
+
+      </div>
+
+      <h3>March 2026</h3>
+
+      <div class="transaction-row">
+
+        <div>
+
+          <span class="transaction-name">Kellon’s Shop Deposit</span>
+
+          <span class="transaction-date">Mar 20, 2026</span>
+
+        </div>
+
+        <span class="transaction-amount credit">+$32,000.49</span>
+
+      </div>
+
+    </div>
+
+<!-- Action screens -->
+
+<div id="actionScreen" class="transaction-card" style="display:none;">
+
+  <button type="button" onclick="closeActionScreen()">← Back to Dashboard</button>
+
+  <h2 id="actionTitle">Action</h2>
+
+  <p id="actionDescription">Demo feature only.</p>
+
+  <div id="actionFormArea"></div>
+
+  <p id="actionResult" role="status" aria-live="polite"></p>
+
+</div>
+  </section>
+
+  <!-- Supabase library: load before the application script -->
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <script>
+
+    const SUPABASE_URL =
+
+      'https://svtjiwjyttfhbahtphwa.supabase.co';
+
+    const SUPABASE_PUBLISHABLE_KEY =
+
+      'sb_publishable_P9mA1vlCneqNCwH8u-ZN9g_XeNnnmnE';
+
+    const signInBtn = document.getElementById('signInBtn');
+
+    const loginMessage = document.getElementById('loginMessage');
+
+    const signInCard = document.getElementById('signInCard');
+
+    const dashboard = document.getElementById('Dashboard');
+
+    const logoutBtn = document.getElementById('logoutBtn');
+
+    const balanceAmount = document.getElementById('balanceAmount');
+
+    const toggleBalanceBtn = document.getElementById('toggleBalanceBtn');
+
+    const originalBalance = balanceAmount.textContent.trim();
+
+    let balanceHidden = false;
+
+    // Initialize Supabase and handle setup errors.
+
+    let supabaseClient = null;
+
+    try {
+
+      if (!window.supabase) {
+
+        throw new Error('Supabase library did not load.');
+
+      }
+
+      supabaseClient = window.supabase.createClient(
+
+        SUPABASE_URL,
+
+        SUPABASE_PUBLISHABLE_KEY
+
+      );
+
+    } catch (error) {
+
+      console.error('Supabase setup error:', error);
+
+      loginMessage.textContent =
+
+        'Unable to initialize sign-in. Check your connection and settings.';
+
+      loginMessage.style.color = 'red';
+
+      signInBtn.disabled = true;
+
+    }
+
+
+const actionDefinitions = {
+  Transfer: {
+    title: 'Transfer Money',
+    description: 'Enter the recipient and transfer details.',
+    fields: [
+      { name: 'recipient', label: 'Recipient name', type: 'text', required: true },
+      { name: 'account', label: 'Recipient account', type: 'text', required: true },
+      { name: 'amount', label: 'Amount', type: 'number', required: true }
+    ]
+  },
+
+  Withdraw: {
+    title: 'Withdraw Funds',
+    description: 'Enter your withdrawal request details.',
+    fields: [
+      { name: 'method', label: 'Withdrawal method', type: 'text', required: true },
+      { name: 'amount', label: 'Amount', type: 'number', required: true }
+    ]
+  },
+
+  Savings: {
+    title: 'Savings Goals',
+    description: 'Set a target for your savings.',
+    fields: [
+      { name: 'goal', label: 'Savings goal', type: 'text', required: true },
+      { name: 'target', label: 'Target amount', type: 'number', required: true },
+      { name: 'date', label: 'Target date', type: 'date', required: true }
+    ]
+  },
+
+  Investment: {
+    title: 'Investment',
+    description: 'Review investment options.',
+    fields: [
+      { name: 'plan', label: 'Investment plan', type: 'text', required: true },
+      { name: 'amount', label: 'Amount to invest', type: 'number', required: true }
+    ]
+  },
+
+  Betting: {
+    title: 'Betting',
+    description: 'Betting provider integration is required for real bets.',
+    fields: [
+      { name: 'provider', label: 'Provider', type: 'text', required: true }
+    ]
+  },
+
+  Statement: {
+    title: 'Account Statement',
+    description: 'Choose a date range for your statement.',
+    fields: [
+      { name: 'startDate', label: 'Start date', type: 'date', required: true },
+      { name: 'endDate', label: 'End date', type: 'date', required: true }
+    ]
+  },
+
+  'Pay Bills': {
+    title: 'Pay Bills',
+    description: 'Enter your bill details.',
+    fields: [
+      { name: 'billType', label: 'Bill type', type: 'text', required: true },
+      { name: 'reference', label: 'Bill reference', type: 'text', required: true },
+      { name: 'amount', label: 'Amount', type: 'number', required: true }
+    ]
+  }
+};
+
+function showActionMessage(message) {
+  const result = document.getElementById('actionResult');
+  if (result) result.textContent = message;
+}
+
+function showActionScreen(action) {
+  const config = actionDefinitions[action];
+
+  if (!config) {
+    showActionMessage('This feature is not configured yet.');
+    return;
+  }
+
+  const screen = document.getElementById('actionScreen');
+  const title = document.getElementById('actionTitle');
+  const description = document.getElementById('actionDescription');
+  const formArea = document.getElementById('actionFormArea');
+
+  if (!screen || !title || !description || !formArea) {
+    console.error('Action screen HTML elements are missing.');
+    return;
+  }
+
+  title.textContent = config.title;
+  description.textContent = config.description;
+  formArea.replaceChildren();
+
+  const form = document.createElement('form');
+
+  config.fields.forEach(function (field) {
+    const label = document.createElement('label');
+    label.htmlFor = 'action-' + field.name;
+    label.textContent = field.label;
+
+    const input = document.createElement('input');
+input.id = label.htmlFor;
+input.name = field.name;
+input.type = field.type;
+input.required = field.required;
+
+input.placeholder = field.type === 'number'
+  ? 'Enter amount'
+  : field.type === 'date'
+    ? 'Select date'
+    : 'Enter ' + field.label.toLowerCase();
+
+input.autocomplete = 'off';
+
+    if (field.type === 'number') {
+      input.min = '0.01';
+      input.step = '0.01';
+    }
+
+    form.append(label, input);
+  });
+
+  const submit = document.createElement('button');
+  submit.type = 'submit';
+  submit.textContent = 'Submit Request';
+  form.appendChild(submit);
+
+  form.addEventListener('submit', function (event) {
+    event.preventDefault();
+
+    if (!form.reportValidity()) return;
+
+    const values = Object.fromEntries(
+      new FormData(form).entries()
+    );
+
+    console.log('Validated request:', {
+      action: action,
+      fields: values
+    });
+
+    showActionMessage(
+      'Form completed. This feature is not connected to a financial provider. No money has moved.'
+    );
+  });
+
+  formArea.appendChild(form);
+
+  const quickActions = document.querySelector('.quick-actions-card');
+  const transactions = document.querySelector('.transaction-card');
+
+  if (quickActions) quickActions.style.display = 'none';
+  if (transactions) transactions.style.display = 'none';
+
+  screen.style.display = 'block';
+  screen.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function closeActionScreen() {
+  const screen = document.getElementById('actionScreen');
+  const quickActions = document.querySelector('.quick-actions-card');
+  const transactions = document.querySelector('.transaction-card');
+
+  if (screen) screen.style.display = 'none';
+  if (quickActions) quickActions.style.display = 'block';
+  if (transactions) transactions.style.display = 'block';
+
+  const formArea = document.getElementById('actionFormArea');
+  if (formArea) formArea.replaceChildren();
+
+  showActionMessage('');
+}
+
+// Keeps your existing action buttons working.
+function showAction(action) {
+  showActionScreen(action);
+}
+
+    // Hide or show the sample balance.
+
+    toggleBalanceBtn.addEventListener('click', function () {
+
+      balanceHidden = !balanceHidden;
+
+      balanceAmount.textContent = balanceHidden
+
+        ? '••••••••'
+
+        : originalBalance;
+
+      toggleBalanceBtn.textContent = balanceHidden
+
+        ? 'SHOW BALANCE'
+
+        : 'HIDE BALANCE';
+
+    });
+
+    // Sign in with Supabase Authentication.
+
+    signInBtn.addEventListener('click', async function () {
+
+      if (!supabaseClient) {
+
+        loginMessage.textContent =
+
+          'Sign-in is unavailable. Check the Supabase setup.';
+
+        loginMessage.style.color = 'red';
+
+        return;
+
+      }
+
+      const email = document.getElementById('email').value.trim();
+
+      const password = document.getElementById('password').value;
+
+      if (!email || !password) {
+
+        loginMessage.textContent =
+
+          'Please enter your email and password.';
+
+        loginMessage.style.color = 'red';
+
+        return;
+
+      }
+
+      signInBtn.disabled = true;
+
+      signInBtn.textContent = 'SIGNING IN...';
+
+      loginMessage.textContent = '';
+
+      try {
+
+        const { data, error } =
+
+          await supabaseClient.auth.signInWithPassword({
+
+            email: email,
+
+            password: password
+
+          });
+
+        if (error) {
+
+          loginMessage.textContent =
+
+            'Sign-in failed. Check your credentials and email confirmation.';
+
+          loginMessage.style.color = 'red';
+
+          return;
+
+        }
+
+        if (data.user) {
+
+          signInCard.style.display = 'none';
+
+          dashboard.style.display = 'block';
+
+        }
+
+      } catch (error) {
+
+        console.error('Sign-in error:', error);
+
+        loginMessage.textContent =
+
+          'Unable to connect. Please check your internet connection.';
+
+        loginMessage.style.color = 'red';
+
+      } finally {
+
+        signInBtn.disabled = false;
+
+        signInBtn.textContent = 'SIGN IN';
+
+      }
+
+    });
+
+    // Log out.
+
+    logoutBtn.addEventListener('click', async function () {
+
+      if (!supabaseClient) {
+
+        return;
+
+      }
+
+      logoutBtn.disabled = true;
+
+      try {
+
+        const { error } = await supabaseClient.auth.signOut();
+
+        if (error) {
+
+          alert('Unable to log out. Please try again.');
+
+          return;
+
+        }
+
+        dashboard.style.display = 'none';
+
+        signInCard.style.display = 'block';
+
+        loginMessage.textContent = 'You have logged out successfully.';
+
+        loginMessage.style.color = 'green';
+
+        document.getElementById('password').value = '';
+
+      } catch (error) {
+
+        console.error('Logout error:', error);
+
+        alert('Unable to log out. Please try again.');
+
+      } finally {
+
+        logoutBtn.disabled = false;
+
+      }
+
+    });
+
+  </script>
+
+</body>
+
+</html>
